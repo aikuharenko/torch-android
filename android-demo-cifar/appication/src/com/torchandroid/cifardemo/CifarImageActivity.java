@@ -35,8 +35,8 @@ public class CifarImageActivity extends Activity {
 	private final int REQUEST_CODE_IMAGE = 100;
 	private final int REQUEST_CODE_CAMERA = 200;
 	private Uri mImageUri;
-    Bitmap resizedBitmap;
-    AsyncRecognizer ar;
+  Bitmap resizedBitmap;
+  AsyncRecognizer ar;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -137,13 +137,13 @@ public class CifarImageActivity extends Activity {
 		return contentUri.getPath();
 	}
 
-    class AsyncRecognizer extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            int result = mLuaManager.getTopRecognitionResult(32, 32, Util.getImageRGBA(resizedBitmap));
-            return null;
-        }
+  class AsyncRecognizer extends AsyncTask<Void, Void, Void> {
+    @Override
+    protected Void doInBackground(Void... params) {
+      int result = mLuaManager.getTopRecognitionResult(32, 32, Util.getImageRGBA(resizedBitmap));
+      return null;
     }
+  }
 
 	OnClickListener mStartRecogButtonClickListener = new OnClickListener() {
 
@@ -175,8 +175,8 @@ public class CifarImageActivity extends Activity {
 					else
 						mStartRecogButton.setText("recognition failed");
 					*/
-                    ar = new AsyncRecognizer();
-                    ar.execute();
+          ar = new AsyncRecognizer();
+          ar.execute();
 
 					mSmallImageView.setImageBitmap(resizedBitmap);
 				} else {
