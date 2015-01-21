@@ -17,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.os.AsyncTask;
 
 import com.torchandroid.cifardemo.lua.LuaManager;
 import com.torchandroid.cifardemo.util.Util;
@@ -34,6 +35,8 @@ public class CifarImageActivity extends Activity {
 	private final int REQUEST_CODE_IMAGE = 100;
 	private final int REQUEST_CODE_CAMERA = 200;
 	private Uri mImageUri;
+    Bitmap resizedBitmap;
+    AsyncRecognizer ar;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -134,6 +137,14 @@ public class CifarImageActivity extends Activity {
 		return contentUri.getPath();
 	}
 
+    class AsyncRecognizer extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            int result = mLuaManager.getTopRecognitionResult(32, 32, Util.getImageRGBA(resizedBitmap));
+            return null;
+        }
+    }
+
 	OnClickListener mStartRecogButtonClickListener = new OnClickListener() {
 
 		@Override
@@ -147,7 +158,7 @@ public class CifarImageActivity extends Activity {
 					Log.e(TAG, "bitmap size : " + bitmap.getWidth() + ","
 							+ bitmap.getHeight());
 
-					Bitmap resizedBitmap;
+
 					if (bitmap.getWidth() != 32 || bitmap.getHeight() != 32) {
 						Log.d(TAG, "bitmap resized to 32x32");
 						resizedBitmap = Bitmap.createScaledBitmap(bitmap, 32,
@@ -155,7 +166,7 @@ public class CifarImageActivity extends Activity {
 					} else {
 						resizedBitmap = bitmap;
 					}
-
+                    /*
 					int result = mLuaManager.getTopRecognitionResult(32, 32,
 							Util.getImageRGBA(resizedBitmap));
 					if (result != -1)
@@ -163,6 +174,10 @@ public class CifarImageActivity extends Activity {
 								+ Util.classes[result - 1]);
 					else
 						mStartRecogButton.setText("recognition failed");
+					*/
+                    ar = new AsyncRecognizer();
+                    ar.execute();
+
 					mSmallImageView.setImageBitmap(resizedBitmap);
 				} else {
 					Log.e(TAG, "bitmap null");
